@@ -1,1 +1,8 @@
-site_name: My Docs
+site_name: David Hatchett Portfolio
+
+nav:
+  - Home: index.md
+  - ADHD: adhd/adhd.md
+  - Video Game Completion and Speed Run Times: game_speed/game_speed.md
+
+theme: mkdocs
