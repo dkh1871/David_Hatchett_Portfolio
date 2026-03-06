@@ -17,5 +17,3 @@ This site is run by the charity group Games Done Quick, which holds several year
 
 ### [API: SpeedRuns.com API](https://github.com/speedruncomorg/api/tree/master/version1)
 SpeedRuns.com is a popular site for tracking and sharing speed runs. They kindly provide an API that can be used to gather data and submit data. We will pull the top speed runs for games from this site.  
-
-## [Repo Placeholder]()
