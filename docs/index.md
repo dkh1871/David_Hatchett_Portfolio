@@ -2,8 +2,8 @@
 
 
 Hi, I’m David. I've been working as a data professional since 2012. I'm currently a Principal Data Analyst working in the banking Industry.
-I've spent many years working in bad-debt recovery and building analytics solutions to help the business. I have expertise in figuring out. 
-how your data works and how to produce usable, insightful datasets, metrics, models, and visualizations.
+I've spent many years building analytics solutions to help businesses make data-driven decisions. I have expertise in figuring out 
+how data works and how to produce usable, insightful datasets, metrics, models, and visualizations.
 
 ## Tools: 
 
@@ -22,6 +22,15 @@ how your data works and how to produce usable, insightful datasets, metrics, mod
 - Visualizations: 
     - Tableau
 	- Matplotlib  
+- Distributed Computing:
+	- Spark
+	- YARN
+	- HDFS
+	- Hive
+	- Hbase
+	- Nifi
+	- Kafka
+	- Sofi
 
 
 ## Skills:  
