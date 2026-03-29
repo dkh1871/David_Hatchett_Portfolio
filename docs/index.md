@@ -39,8 +39,8 @@ Foucs on cleaning and loading data taken from Kaggle, but orginally from BoardGa
 ## [Board Game Ownership Prediction Model](https://github.com/dkh1871/Board_Game_Ownership_Prediction_Model)
 This is a project based on the Board Game Data Cleaning and Loading project. It extracts data from the SQLite database and builds a model to predict board game ownership.  
 
-## [Board Game NCF Recommendation Model](https://github.com/dkh1871/BoardGame_recomedation_NCF_Model)
-This project explores the creation of a recommendation model using neural collaborative filtering(NCF) from users' reviews of board games. This project focused on practicing deep learning with PyTorch.
+## [Board Game Recommendation Model](https://github.com/dkh1871/BoardGame_recomedation_NCF_Model)
+This project explores the creation of a recommendation model using neural collaborative filtering(NCF) like architectures from users' reviews of board games. This project focused on practicing deep learning with PyTorch.
 
 ## [Board Game User Classification](https://github.com/dkh1871/Board_Game_Users_Classification)  
 This was an attempt to create user segmentation based on board game data. While I'm not going to pursue the project further, it still show
