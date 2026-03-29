@@ -5,6 +5,5 @@ theme:
 
 nav:
   - About: index.md
-  - Projects: projects.md
 
 
