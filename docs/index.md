@@ -25,7 +25,7 @@ pandas, PyTorch, sklearn, Matplotlib, Conda
 Tableau
 
 **Distributed Computing (Foundational):**  
-Spark, YARN, HDFS, Hive, Hbase, Nifi, Kafka, Sofi
+Spark, YARN, HDFS, Hive, Hbase, Nifi, Kafka, Solr
 
 
 # Projects  
