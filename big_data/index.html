@@ -55,11 +55,19 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#distributed-data-processing-project" class="nav-link">Distributed Data Processing Project</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#description" class="nav-link">Description</a>
+            <li class="nav-item" data-bs-level="2"><a href="#overview" class="nav-link">Overview</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#pipeline-flow" class="nav-link">Pipeline Flow</a>
+            <li class="nav-item" data-bs-level="2"><a href="#environment" class="nav-link">Environment</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#pipeline-walkthrough" class="nav-link">Pipeline Walkthrough</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#limitations" class="nav-link">Limitations</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -71,45 +79,116 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="distributed-data-processing-project">Distributed Data Processing Project</h1>
-<h2 id="description">Description</h2>
-<p>This project focused on the basics of distributed data processing to gain an understanding of the concepts and tools involved.
-The environment was provided by the instructor and was used to practice the concepts. The goal of the project was to build an end-to-end machine learning pipeline. Below, the Pipeline and the steps taken to complete the project are walked through.</p>
-<h3 id="technologies-used">Technologies used:</h3>
+<h2 id="overview">Overview</h2>
+<p>This project is the capstone for a graduate distributed systems course covering the Hadoop/Spark big data ecosystem. The goal was to build an end-to-end machine learning pipeline.</p>
+<p>The focus of this project was the pipeline and the tools used, not the ML model being run. Because of this, I chose a simple dataset from Kaggle.</p>
+<p><strong>Technologies used:</strong></p>
 <ul>
+<li>Google Cloud Platform (Compute Engine)</li>
+<li>Docker / Docker Compose</li>
+<li>Apache NiFi</li>
 <li>HDFS</li>
 <li>Hive</li>
-<li>Hbase</li>
-<li>Nifi</li>
-<li>Spark</li>
+<li>Spark (PySpark)</li>
+<li>HBase</li>
 <li>YARN</li>
 </ul>
-<h2 id="pipeline-flow">Pipeline Flow</h2>
+<h2 id="environment">Environment</h2>
+<p>This project ran a single Compute Engine VM created on Google Cloud. The machine had 4 CPUs and 16 GB of RAM. All applications ran on the same machine via Docker; as one might note, the available resources are insufficient to run all services simultaneously. To resolve this issue, services were brought up and down as needed. </p>
+<h2 id="pipeline-walkthrough">Pipeline Walkthrough</h2>
 <p><img alt="Data Pipeline" src="../images/DataPipeLine.png" /></p>
-<h3 id="nifi-flow">Nifi Flow</h3>
-<p><img alt="Nifi Flow" src="../images/obj1_nifi_data_all_run.png" /></p>
-<h3 id="verify-hdfs-file">Verify HDFS File</h3>
-<p><img alt="HDFS File" src="../images/obj1_nifi_hdfs_ls.png" /></p>
-<h3 id="hive-table">Hive Table</h3>
-<p><img alt="Hive Table" src="../images/obj2_hive_create_table.png" />  </p>
-<p><img alt="Hive Table" src="../images/obj2_hive_skip_header.png" /></p>
-<h3 id="verify-hive-table">Verify Hive Table</h3>
-<p><img alt="Verify Hive Table" src="../images/obj2_hive_sql_verify.png" /></p>
-<h3 id="prepare-environment-for-spark-job">Prepare environment for Spark Job</h3>
-<p>Install packages on the Main Node
-<img alt="Prepare enviroment for Spark Job Main" src="../images/obj3_main_setup.png" />  </p>
-<p>Install packages on Worker1 Node
-<img alt="Prepare enviroment for Spark Job Worker1" src="../images/obj3_wrk1_setup.png" />  </p>
-<p>Install packages on Worker2 Node
-<img alt="Prepare enviroment for Spark Job Worker2" src="../images/obj3_wrk2_setup.png" />  </p>
-<p>Start the Thrift Server
-<img alt="Start the Thrift Server" src="../images/obj3_no_hub.png" />  </p>
-<h3 id="create-hbase-table">Create Hbase Table</h3>
-<p><img alt="Create Hbase Table" src="../images/obj4_create_table.png" />  </p>
-<h3 id="run-spark-job">Run Spark Job</h3>
-<p><img alt="Run Spark Job" src="../images/sprk_log_1.png" />  </p>
-<p><img alt="Run Spark Job2" src="../images/obj5_running.png" />  </p>
-<h3 id="verify-spark-job">Verify Spark Job</h3>
-<p><img alt="Verify Spark Job" src="../images/obj7_hbscan.png" />  </p></div>
+<h3 id="1-nifi-ingestion-into-hdfs">1. NiFi Ingestion into HDFS</h3>
+<p>The flow used three NiFi processors: <strong>InvokeHTTP</strong> to pull the source data from GitHub, <strong>UpdateAttribute</strong> to rewrite the output filename, and <strong>PutHDFS</strong> to land the result in HDFS.</p>
+<p><img alt="Nifi Flow" src="../images/obj1_nifi_data_all_run.png" />
+<img alt="Verify HDFS File" src="../images/obj1_nifi_hdfs_ls.png" /></p>
+<h3 id="2-hive-managed-table">2. Hive Managed Table</h3>
+<p>Loaded the ingested data into a Hive-managed table. At this point in the process, I didn’t see the need to transform the data extensively, as this was a one-off. In a normal pipeline, we would want to insert some data quality checks at this point to ensure the ingested file meets expected standards.</p>
+<p><img alt="Hive Table Creation" src="../images/obj2_hive_create_table.png" />
+<img alt="Hive Skip Header Fix" src="../images/obj2_hive_skip_header.png" />
+<img alt="Hive Load Data" src="../images/obj2_hive_load_data.png" />
+<img alt="Verify Hive Table" src="../images/obj2_hive_sql_verify.png" /></p>
+<h3 id="3-environment-setup-across-nodes">3. Environment Setup Across Nodes</h3>
+<p>One of the benefits of Spark is that work can be split and completed by any number of workers. The following setup was performed to ensure all workers have access to the same Python packages and configuration. We could improve by updating the underlying image used to create the workers to include the needed configuration.</p>
+<p><img alt="Main Node Setup" src="../images/obj3_main_setup.png" />
+<img alt="Worker1 Setup" src="../images/obj3_wrk1_setup.png" />
+<img alt="Worker2 Setup" src="../images/obj3_wrk2_setup.png" />
+<img alt="Thrift Server Running" src="../images/obj3_no_hub.png" /></p>
+<h3 id="4-hbase-table-for-model-metrics">4. HBase Table for Model Metrics</h3>
+<p>Created an HBase table to hold and track model run metrics. I designed the row key (<code>model_name_datetimestamp</code>) to be a combination of the model name and the run's date and time stamp. I chose this row key so that the same model run would be stored together, while different runs could be split across shards.   </p>
+<p><img alt="HBase Table Creation" src="../images/obj4_create_table.png" />
+<img alt="HBase Scan Command" src="../images/obj4_scan_command.png" /></p>
+<h3 id="5-pyspark-model-training">5. PySpark Model Training</h3>
+<p>Below is the logistic regression model run as part of the project. Each run is stored in the table created in the previous step with the following fields: accuracy, weighted precision, and weighted recall in HBase.</p>
+<pre><code class="language-python">from pyspark.sql import SparkSession
+from pyspark.ml.feature import VectorAssembler
+from pyspark.ml.classification import LogisticRegression
+from pyspark.ml.evaluation import BinaryClassificationEvaluator
+import happybase
+from datetime import datetime
+
+now = datetime.now()
+run_name = f'personality_prediction_{now.strftime(&quot;%Y%m%d%H%M%S&quot;)}'
+
+# Function to write data to HBase inside each partition
+def write_to_hbase_partition(partition):
+    connection = happybase.Connection('master')
+    connection.open()
+    table = connection.table('model_metrics')
+    for row in partition:
+        row_key, column, value = row
+        table.put(row_key, {column: value})
+    connection.close()
+
+spark = SparkSession.builder.appName(&quot;personality_prediction&quot;).enableHiveSupport().getOrCreate()
+
+df = spark.sql(&quot;&quot;&quot;
+SELECT
+    time_spent_alone,
+    CASE WHEN stage_fear = 'Yes' THEN 1 ELSE 0 END AS stage_fear,
+    social_event_attendance,
+    going_outside,
+    CASE WHEN drained_after_socializing = 'Yes' THEN 1 ELSE 0 END AS drained_after_socializing,
+    friends_circle_size,
+    post_frequency,
+    CASE
+        WHEN class = 'Introvert' THEN 0
+        WHEN class = 'Extrovert' THEN 1
+        ELSE NULL
+    END AS class
+FROM personality
+&quot;&quot;&quot;)
+
+assembler = VectorAssembler(
+    inputCols=[&quot;time_spent_alone&quot;, &quot;stage_fear&quot;, &quot;social_event_attendance&quot;, &quot;going_outside&quot;,
+               &quot;drained_after_socializing&quot;, &quot;friends_circle_size&quot;, &quot;post_frequency&quot;],
+    outputCol=&quot;features&quot;,
+    handleInvalid=&quot;skip&quot;
+)
+final_df = assembler.transform(df).select(&quot;features&quot;, &quot;class&quot;)
+
+train_data, test_data = final_df.randomSplit([0.8, 0.2])
+
+lr = LogisticRegression(featuresCol=&quot;features&quot;, labelCol=&quot;class&quot;, maxIter=10,
+                         regParam=0.01, threshold=0.8, family=&quot;binomial&quot;)
+model = lr.fit(train_data)
+test_results = model.evaluate(test_data)
+
+data = [
+    (run_name, 'mm:accuracy', str(test_results.accuracy)),
+    (run_name, 'mm:weightedPrecision', str(test_results.weightedPrecision)),
+    (run_name, 'mm:weightedRecall', str(test_results.weightedRecall)),
+]
+rdd = spark.sparkContext.parallelize(data)
+rdd.foreachPartition(write_to_hbase_partition)
+
+spark.stop()
+</code></pre>
+<p><img alt="Run Spark Job" src="../images/sprk_log_1.png" />
+<img alt="Spark Job Running" src="../images/obj5_running.png" /></p>
+<h3 id="6-verify-results-in-hbase">6. Verify Results in HBase</h3>
+<p><img alt="Verify HBase Scan" src="../images/obj7_hbscan.png" /></p>
+<h2 id="limitations">Limitations</h2>
+<p>This pipeline lacks data quality and validation layers, as expected, since this project's focus is on setting up and running the pipeline. Without these layers, an upstream issue would cause the whole pipeline to fail. These are important layers to add if I were to convert the pipeline into production.</p></div>
             </div>
         </div>
 
